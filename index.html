@@ -1,25 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Code Journal</title>
   <link rel="icon" href="images/favicon.ico">
-  <link
-    rel="stylesheet"
-    crossorigin="anonymous"
+  <link rel="stylesheet" crossorigin="anonymous"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
     integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==">
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
   <header>
+    <div class="header-container">
+      <h2>Code Journal</h2>
+    </div>
   </header>
   <main>
+    <div data-view="entry-form">
+      <form>
+        <div class="row">
+          <div class="container">
+            <div class="mediaview">
+              <div class="column-half">
+                <h1>New Entry</h1>
+                <div class="img-container">
+                  <img src="images/placeholder-image-square.jpg" alt="image placeholder">
+                </div>
+              </div>
+              <div class="column-half">
+                <div class="title-container">
+                  <label for="title">Title</label>
+                  <input required type="text" name="title" id="title">
+                </div>
+                <div class="photo-container">
+                  <label for="photoUrl">Photo URL</label>
+                  <input required type="text" name="photoUrl" id="photoUrl">
+                </div>
+              </div>
+            </div>
+            <div class="notes-container">
+              <label for="notes">Notes</label>
+              <textarea required name="notes" id="notes" cols="30" rows="10"></textarea>
+            </div>
+            <div class="button-container">
+              <button type="sumbit">SAVE</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
   </main>
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>
 </body>
+
 </html>
