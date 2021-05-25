@@ -20,6 +20,10 @@ h2 {
   justify-content: flex-end;
 }
 
+.fixedWidth {
+  width: 40px;
+}
+
 .noEntry {
   font-size: 24px;
 }
@@ -111,10 +115,6 @@ textarea:focus {
   border: 2px solid #562b81;
 }
 
-[data-view="entries"] {
-  background-color: white;
-}
-
 .entryTitle {
   font-weight: bold;
   font-size: 26px;
@@ -124,6 +124,14 @@ textarea:focus {
 .entryNotes {
   font-size: 18px;
   line-height: 1.6rem;
+}
+
+.edit-container {
+  margin-top: 1.6rem;
+}
+
+.editButton {
+  cursor: pointer;
 }
 
 @media screen and (min-width: 768px) {
@@ -141,6 +149,10 @@ textarea:focus {
   }
 
   .entryTitle {
+    margin-top: 0;
+  }
+
+  .edit-container {
     margin-top: 0;
   }
 }
