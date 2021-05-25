@@ -83,7 +83,6 @@ data.editing = null;
   </div>
 </div> */
 
-var $ul = document.querySelector('ul');
 window.addEventListener('DOMContentLoaded', loadDom);
 
 function loadDom(event) {
@@ -91,10 +90,10 @@ function loadDom(event) {
     $noEntry.className = 'noEntry';
     return;
   }
-
   renderAppend(data.entries);
 }
 
+var $ul = document.querySelector('ul');
 $ul.addEventListener('click', function (event) {
   if (event.target.getAttribute('data-entry-id') !== null) {
     $form.removeAttribute('class');
