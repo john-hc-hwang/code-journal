@@ -34,76 +34,8 @@ $form.addEventListener('submit', function (event) {
       $ul.removeChild(firstChild);
     }
 
-    for (var j = 0; j < data.entries.length; j++) {
-      var $row = document.createElement('div');
-      $row.className = 'row';
+    renderAppend(data.entries);
 
-      var $container = document.createElement('div');
-      $container.className = 'container';
-
-      $row.appendChild($container);
-
-      var $mediaview = document.createElement('div');
-      $mediaview.className = 'mediaview';
-
-      $container.appendChild($mediaview);
-
-      var $colhalf = document.createElement('div');
-      $colhalf.className = 'column-half';
-
-      $mediaview.appendChild($colhalf);
-
-      var $imgContainer = document.createElement('div');
-      $imgContainer.className = 'img-container';
-
-      $colhalf.appendChild($imgContainer);
-
-      var $image = document.createElement('img');
-      $image.setAttribute('src', data.entries[j].photoUrl);
-      $image.setAttribute('alt', data.entries[j].title);
-
-      $imgContainer.appendChild($image);
-
-      var $colhalf2 = document.createElement('div');
-      $colhalf2.className = 'column-half';
-
-      $mediaview.appendChild($colhalf2);
-
-      var $divflex = document.createElement('div');
-      $divflex.className = 'flex';
-
-      $colhalf2.appendChild($divflex);
-
-      var $entryTitle = document.createElement('p');
-      $entryTitle.className = 'entryTitle';
-      $entryTitle.textContent = data.entries[j].title;
-
-      $divflex.appendChild($entryTitle);
-
-      var $editContainer = document.createElement('div');
-      $editContainer.className = 'column-full flex end edit-container';
-      $divflex.appendChild($editContainer);
-
-      var $div = document.createElement('div');
-      $div.className = 'fixedWidth';
-      $editContainer.appendChild($div);
-
-      var $edit = document.createElement('img');
-      $edit.setAttribute('src', 'images/edit.PNG');
-      $edit.setAttribute('alt', 'edit icon');
-      $edit.setAttribute('data-entry-id', data.entries[j].entryId);
-      $edit.className = 'editButton';
-
-      $div.appendChild($edit);
-
-      var $entryNotes = document.createElement('p');
-      $entryNotes.className = 'entryNotes';
-      $entryNotes.textContent = data.entries[j].notes;
-
-      $colhalf2.appendChild($entryNotes);
-
-      $ul.append($row);
-    }
   } else {
     newObj = {};
 
@@ -115,60 +47,60 @@ $form.addEventListener('submit', function (event) {
 
     data.entries.unshift(newObj);
 
-    $row = document.createElement('div');
+    var $row = document.createElement('div');
     $row.className = 'row';
 
-    $container = document.createElement('div');
+    var $container = document.createElement('div');
     $container.className = 'container';
 
     $row.appendChild($container);
 
-    $mediaview = document.createElement('div');
+    var $mediaview = document.createElement('div');
     $mediaview.className = 'mediaview';
 
     $container.appendChild($mediaview);
 
-    $colhalf = document.createElement('div');
+    var $colhalf = document.createElement('div');
     $colhalf.className = 'column-half';
 
     $mediaview.appendChild($colhalf);
 
-    $imgContainer = document.createElement('div');
+    var $imgContainer = document.createElement('div');
     $imgContainer.className = 'img-container';
 
     $colhalf.appendChild($imgContainer);
 
-    $image = document.createElement('img');
+    var $image = document.createElement('img');
     $image.setAttribute('src', newObj.photoUrl);
     $image.setAttribute('alt', newObj.title);
 
     $imgContainer.appendChild($image);
 
-    $colhalf2 = document.createElement('div');
+    var $colhalf2 = document.createElement('div');
     $colhalf2.className = 'column-half';
 
     $mediaview.appendChild($colhalf2);
 
-    $divflex = document.createElement('div');
+    var $divflex = document.createElement('div');
     $divflex.className = 'flex';
 
     $colhalf2.appendChild($divflex);
 
-    $entryTitle = document.createElement('p');
+    var $entryTitle = document.createElement('p');
     $entryTitle.className = 'entryTitle';
     $entryTitle.textContent = newObj.title;
 
     $divflex.appendChild($entryTitle);
 
-    $editContainer = document.createElement('div');
+    var $editContainer = document.createElement('div');
     $editContainer.className = 'column-full flex end edit-container';
     $divflex.appendChild($editContainer);
 
-    $div = document.createElement('div');
+    var $div = document.createElement('div');
     $div.className = 'fixedWidth';
     $editContainer.appendChild($div);
 
-    $edit = document.createElement('img');
+    var $edit = document.createElement('img');
     $edit.setAttribute('src', 'images/edit.PNG');
     $edit.setAttribute('alt', 'edit icon');
     $edit.setAttribute('data-entry-id', newObj.entryId);
@@ -176,7 +108,7 @@ $form.addEventListener('submit', function (event) {
 
     $div.appendChild($edit);
 
-    $entryNotes = document.createElement('p');
+    var $entryNotes = document.createElement('p');
     $entryNotes.className = 'entryNotes';
     $entryNotes.textContent = newObj.notes;
 
@@ -192,6 +124,78 @@ $form.addEventListener('submit', function (event) {
   $form.className = 'hidden';
   $hiddenEntry.removeAttribute('class');
 });
+
+function renderAppend(entry) {
+  for (var elem of entry) {
+    var $row = document.createElement('div');
+    $row.className = 'row';
+
+    var $container = document.createElement('div');
+    $container.className = 'container';
+
+    $row.appendChild($container);
+
+    var $mediaview = document.createElement('div');
+    $mediaview.className = 'mediaview';
+
+    $container.appendChild($mediaview);
+
+    var $colhalf = document.createElement('div');
+    $colhalf.className = 'column-half';
+
+    $mediaview.appendChild($colhalf);
+
+    var $imgContainer = document.createElement('div');
+    $imgContainer.className = 'img-container';
+
+    $colhalf.appendChild($imgContainer);
+
+    var $image = document.createElement('img');
+    $image.setAttribute('src', elem.photoUrl);
+    $image.setAttribute('alt', elem.title);
+
+    $imgContainer.appendChild($image);
+
+    var $colhalf2 = document.createElement('div');
+    $colhalf2.className = 'column-half';
+
+    $mediaview.appendChild($colhalf2);
+
+    var $divflex = document.createElement('div');
+    $divflex.className = 'flex';
+
+    $colhalf2.appendChild($divflex);
+
+    var $entryTitle = document.createElement('p');
+    $entryTitle.className = 'entryTitle';
+    $entryTitle.textContent = elem.title;
+
+    $divflex.appendChild($entryTitle);
+
+    var $editContainer = document.createElement('div');
+    $editContainer.className = 'column-full flex end edit-container';
+    $divflex.appendChild($editContainer);
+
+    var $div = document.createElement('div');
+    $div.className = 'fixedWidth';
+    $editContainer.appendChild($div);
+
+    var $edit = document.createElement('img');
+    $edit.setAttribute('src', 'images/edit.PNG');
+    $edit.setAttribute('alt', 'edit icon');
+    $edit.setAttribute('data-entry-id', elem.entryId);
+    $edit.className = 'editButton';
+
+    $div.appendChild($edit);
+
+    var $entryNotes = document.createElement('p');
+    $entryNotes.className = 'entryNotes';
+    $entryNotes.textContent = elem.notes;
+
+    $colhalf2.appendChild($entryNotes);
+    $ul.append($row);
+  }
+}
 
 window.addEventListener('beforeunload', function (event) {
   var entryJSON = JSON.stringify(data.entries);
