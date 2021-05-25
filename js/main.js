@@ -4,7 +4,7 @@
 var $title = document.querySelector('#title');
 var $photoUrl = document.querySelector('#photoUrl');
 var $notes = document.querySelector('#notes');
-var $img = document.querySelector('img');
+var $img = document.querySelector('.imgEntry');
 
 $photoUrl.addEventListener('input', function (event) {
   $img.setAttribute('src', event.target.value);
@@ -58,50 +58,59 @@ var entryItems = localStorage.getItem('entries');
 var entries = JSON.parse(entryItems);
 
 var $ul = document.querySelector('ul');
-var $row = document.createElement('div');
-$row.className = 'row';
+window.addEventListener('DOMContentLoaded', loadDom);
 
-$ul.appendChild($row);
+function loadDom(event) {
+  if (entries.length === 0) {
+    return;
+  }
 
-var $container = document.createElement('div');
-$container.className = 'container';
+  for (var i = 0; i < entries.length; i++) {
+    var $row = document.createElement('div');
+    $row.className = 'row';
 
-$row.appendChild($container);
+    var $container = document.createElement('div');
+    $container.className = 'container';
 
-var $mediaview = document.createElement('div');
-$mediaview.className = 'mediaview';
+    $row.appendChild($container);
 
-$container.appendChild($mediaview);
+    var $mediaview = document.createElement('div');
+    $mediaview.className = 'mediaview';
 
-var $colhalf = document.createElement('div');
-$colhalf.className = 'column-half';
+    $container.appendChild($mediaview);
 
-$mediaview.appendChild($colhalf);
+    var $colhalf = document.createElement('div');
+    $colhalf.className = 'column-half';
 
-var $imgContainer = document.createElement('div');
-$imgContainer.className = 'img-container';
+    $mediaview.appendChild($colhalf);
 
-$colhalf.appendChild($imgContainer);
+    var $imgContainer = document.createElement('div');
+    $imgContainer.className = 'img-container';
 
-var $image = document.createElement('img');
-$image.setAttribute('src', entries[0].photoUrl);
-$image.setAttribute('alt', entries[0].title);
+    $colhalf.appendChild($imgContainer);
 
-$imgContainer.appendChild($image);
+    var $image = document.createElement('img');
+    $image.setAttribute('src', entries[i].photoUrl);
+    $image.setAttribute('alt', entries[i].title);
 
-var $colhalf2 = document.createElement('div');
-$colhalf2.className = 'column-half';
+    $imgContainer.appendChild($image);
 
-$mediaview.appendChild($colhalf2);
+    var $colhalf2 = document.createElement('div');
+    $colhalf2.className = 'column-half';
 
-var $entryTitle = document.createElement('p');
-$entryTitle.className = 'entryTitle';
-$entryTitle.textContent = entries[0].title;
+    $mediaview.appendChild($colhalf2);
 
-$colhalf2.appendChild($entryTitle);
+    var $entryTitle = document.createElement('p');
+    $entryTitle.className = 'entryTitle';
+    $entryTitle.textContent = entries[i].title;
 
-var $entryNotes = document.createElement('p');
-$entryNotes.className = 'entryNotes';
-$entryNotes.textContent = entries[0].notes;
+    $colhalf2.appendChild($entryTitle);
 
-$colhalf2.appendChild($entryNotes);
+    var $entryNotes = document.createElement('p');
+    $entryNotes.className = 'entryNotes';
+    $entryNotes.textContent = entries[i].notes;
+
+    $colhalf2.appendChild($entryNotes);
+    $ul.appendChild($row);
+  }
+}
