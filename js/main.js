@@ -100,19 +100,19 @@ $ul.addEventListener('click', function (event) {
     $hiddenEntry.className = 'hidden';
     $new.className = 'new hidden';
     $editEntry.className = 'edit';
-  }
 
-  for (var i = 0; i < data.entries.length; i++) {
-    if (event.target.getAttribute('data-entry-id') === data.entries[i].entryId.toString()) {
-      data.editing = data.entries[i];
+    for (var i = 0; i < data.entries.length; i++) {
+      if (event.target.getAttribute('data-entry-id') === data.entries[i].entryId.toString()) {
+        data.editing = data.entries[i];
+      }
     }
-  }
 
-  $title.value = data.editing.title;
-  $photoUrl.value = data.editing.photoUrl;
-  $notes.value = data.editing.notes;
-  $img.setAttribute('src', $photoUrl.value);
-  $img.setAttribute('alt', $title.value);
+    $title.value = data.editing.title;
+    $photoUrl.value = data.editing.photoUrl;
+    $notes.value = data.editing.notes;
+    $img.setAttribute('src', $photoUrl.value);
+    $img.setAttribute('alt', $title.value);
+  }
 });
 
 var $hiddenEntry = document.querySelector('.hidden');
