@@ -91,22 +91,22 @@ var entries = JSON.parse(entryItems);
 data.entries = entries;
 
 /* <div class="row">
-          <div class="container">
-            <div class="mediaview">
-              <div class="column-half">
-                <div class="img-container">
-                  <img src="http://justice4cecil.weebly.com/uploads/5/2/3/3/52333429/2377089_orig.png"
-                    alt="image placeholder">
-                </div>
-              </div>
-              <div class="column-half">
-                <p class="entryTitle">Monke</p>
-                <p class="entryNotes">Monkey with AK47 Monkey with AK47 Monkey with AK47 Monkey with AK47
-                  Monkey with AK47 Monkey with AK47 </p>
-              </div>
-            </div>
-          </div>
-        </div> */
+  <div class="container">
+    <div class="mediaview">
+      <div class="column-half">
+        <div class="img-container">
+          <img src="http://justice4cecil.weebly.com/uploads/5/2/3/3/52333429/2377089_orig.png"
+            alt="image placeholder">
+        </div>
+      </div>
+      <div class="column-half">
+        <p class="entryTitle">Monke</p>
+        <p class="entryNotes">Monkey with AK47 Monkey with AK47 Monkey with AK47 Monkey with AK47
+          Monkey with AK47 Monkey with AK47 </p>
+      </div>
+    </div>
+  </div>
+</div> */
 
 var $ul = document.querySelector('ul');
 window.addEventListener('DOMContentLoaded', loadDom);
