@@ -5,6 +5,7 @@ var $title = document.querySelector('#title');
 var $photoUrl = document.querySelector('#photoUrl');
 var $notes = document.querySelector('#notes');
 var $img = document.querySelector('.imgPreview');
+var $noEntry = document.querySelector('.noEntry');
 
 $photoUrl.addEventListener('input', function (event) {
   $img.setAttribute('src', event.target.value);
@@ -16,6 +17,7 @@ $photoUrl.addEventListener('input', function (event) {
 var $form = document.forms[0];
 $form.addEventListener('submit', function (event) {
   event.preventDefault();
+  $noEntry.className = 'noEntry hidden';
   var newObj = {};
 
   newObj.title = $title.value;
@@ -111,6 +113,7 @@ window.addEventListener('DOMContentLoaded', loadDom);
 
 function loadDom(event) {
   if (entries.length === 0) {
+    $noEntry.className = 'noEntry';
     return;
   }
 

@@ -12,8 +12,16 @@ h2 {
   display: flex;
 }
 
+.center {
+  justify-content: center;
+}
+
 .end {
   justify-content: flex-end;
+}
+
+.noEntry {
+  font-size: 24px;
 }
 
 .newEntry {
