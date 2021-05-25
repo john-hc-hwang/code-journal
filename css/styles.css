@@ -1,13 +1,43 @@
-.header-container {
+header {
   color: white;
   background-color: #562b81;
+  padding: 6px;
 }
 
 h2 {
   font-weight: 100;
-  max-width: 575px;
-  margin: 0 auto;
-  padding: 1rem 1.5rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.center {
+  justify-content: center;
+}
+
+.end {
+  justify-content: flex-end;
+}
+
+.noEntry {
+  font-size: 24px;
+}
+
+.newEntry {
+  color: white;
+  background-color: #562b81;
+  border-style: none;
+  border-radius: 5px;
+  padding: 0.6rem 1rem;
+  margin-top: 1.5rem;
+  cursor: pointer;
+}
+
+span.entries {
+  margin-left: 2rem;
+  font-size: 20px;
+  cursor: pointer;
 }
 
 main {
@@ -81,6 +111,21 @@ textarea:focus {
   border: 2px solid #562b81;
 }
 
+[data-view="entries"] {
+  background-color: white;
+}
+
+.entryTitle {
+  font-weight: bold;
+  font-size: 26px;
+  margin-bottom: 0;
+}
+
+.entryNotes {
+  font-size: 18px;
+  line-height: 1.6rem;
+}
+
 @media screen and (min-width: 768px) {
   .mediaview {
     display: flex;
@@ -95,7 +140,7 @@ textarea:focus {
     margin-left: 0.7rem;
   }
 
-  h2 {
-    margin-left: 0.9rem;
+  .entryTitle {
+    margin-top: 0;
   }
 }
