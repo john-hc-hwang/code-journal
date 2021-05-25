@@ -8,6 +8,30 @@ h2 {
   font-weight: 100;
 }
 
+.flex {
+  display: flex;
+}
+
+.end {
+  justify-content: flex-end;
+}
+
+.newEntry {
+  color: white;
+  background-color: #562b81;
+  border-style: none;
+  border-radius: 5px;
+  padding: 0.6rem 1rem;
+  margin-top: 1.5rem;
+  cursor: pointer;
+}
+
+span.entries {
+  margin-left: 2rem;
+  font-size: 20px;
+  cursor: pointer;
+}
+
 main {
   background-color: #f0f0f0;
 }

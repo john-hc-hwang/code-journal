@@ -4,7 +4,7 @@
 var $title = document.querySelector('#title');
 var $photoUrl = document.querySelector('#photoUrl');
 var $notes = document.querySelector('#notes');
-var $img = document.querySelector('.imgEntry');
+var $img = document.querySelector('.imgPreview');
 
 $photoUrl.addEventListener('input', function (event) {
   $img.setAttribute('src', event.target.value);
@@ -25,6 +25,54 @@ $form.addEventListener('submit', function (event) {
   data.nextEntryId++;
 
   data.entries.unshift(newObj);
+
+  var $row = document.createElement('div');
+  $row.className = 'row';
+
+  var $container = document.createElement('div');
+  $container.className = 'container';
+
+  $row.appendChild($container);
+
+  var $mediaview = document.createElement('div');
+  $mediaview.className = 'mediaview';
+
+  $container.appendChild($mediaview);
+
+  var $colhalf = document.createElement('div');
+  $colhalf.className = 'column-half';
+
+  $mediaview.appendChild($colhalf);
+
+  var $imgContainer = document.createElement('div');
+  $imgContainer.className = 'img-container';
+
+  $colhalf.appendChild($imgContainer);
+
+  var $image = document.createElement('img');
+  $image.setAttribute('src', newObj.photoUrl);
+  $image.setAttribute('alt', newObj.title);
+
+  $imgContainer.appendChild($image);
+
+  var $colhalf2 = document.createElement('div');
+  $colhalf2.className = 'column-half';
+
+  $mediaview.appendChild($colhalf2);
+
+  var $entryTitle = document.createElement('p');
+  $entryTitle.className = 'entryTitle';
+  $entryTitle.textContent = newObj.title;
+
+  $colhalf2.appendChild($entryTitle);
+
+  var $entryNotes = document.createElement('p');
+  $entryNotes.className = 'entryNotes';
+  $entryNotes.textContent = newObj.notes;
+
+  $colhalf2.appendChild($entryNotes);
+  $ul.prepend($row);
+
   $form.reset();
   $img.setAttribute('src', 'images/placeholder-image-square.jpg');
 });
@@ -35,6 +83,10 @@ window.addEventListener('beforeunload', function (event) {
   var dataJSON = JSON.stringify(data);
   localStorage.setItem('data', dataJSON);
 });
+
+var entryItems = localStorage.getItem('entries');
+var entries = JSON.parse(entryItems);
+data.entries = entries;
 
 /* <div class="row">
           <div class="container">
@@ -53,9 +105,6 @@ window.addEventListener('beforeunload', function (event) {
             </div>
           </div>
         </div> */
-
-var entryItems = localStorage.getItem('entries');
-var entries = JSON.parse(entryItems);
 
 var $ul = document.querySelector('ul');
 window.addEventListener('DOMContentLoaded', loadDom);
@@ -114,3 +163,16 @@ function loadDom(event) {
     $ul.appendChild($row);
   }
 }
+
+var $hiddenEntry = document.querySelector('.hidden');
+var $navEntries = document.querySelector('.entries');
+$navEntries.addEventListener('click', function (event) {
+  $form.className = 'hidden';
+  $hiddenEntry.removeAttribute('class');
+});
+
+var $newEntry = document.querySelector('.newEntry');
+$newEntry.addEventListener('click', function (event) {
+  $form.removeAttribute('class');
+  $hiddenEntry.className = 'hidden';
+});

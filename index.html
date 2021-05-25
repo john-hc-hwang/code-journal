@@ -17,11 +17,23 @@
 <body>
   <header>
     <div class="container">
-      <h2 class="column-full">Code Journal</h2>
+      <h2 class="column-full">Code Journal<span class="entries">Entries</span></h2>
     </div>
   </header>
   <main>
-    <div data-view="entries">
+    <div class="hidden" data-view="entries">
+      <div class="container">
+        <div class="column-full flex">
+          <div class="column-half">
+            <h1>Entries</h1>
+          </div>
+          <div class="column-half flex end">
+            <div>
+              <button class="newEntry">NEW</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <ul>
       </ul>
     </div>
@@ -33,7 +45,7 @@
               <div class="column-half">
                 <h1>New Entry</h1>
                 <div class="img-container">
-                  <img class="imgEntry" src="images/placeholder-image-square.jpg" alt="image placeholder">
+                  <img class="imgPreview" src="images/placeholder-image-square.jpg" alt="image placeholder">
                 </div>
               </div>
               <div class="column-half">
