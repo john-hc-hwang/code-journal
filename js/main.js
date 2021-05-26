@@ -96,6 +96,9 @@ function loadDom(event) {
 }
 
 var currentEntryId;
+// Keeps track of EntryId to use it to delete/splice the data where we want to
+// that is [data.entries.length - Number(currentEntryId)] since we go in reverse chrono order
+// Needs to reset to undefined after confirming delete, clicking navEntries, submitting form.
 var $ul = document.querySelector('ul');
 $ul.addEventListener('click', function (event) {
   if (event.target.getAttribute('data-entry-id') !== null) {
