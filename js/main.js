@@ -7,6 +7,7 @@ var $notes = document.querySelector('#notes');
 var $img = document.querySelector('.imgPreview');
 var $noEntry = document.querySelector('.noEntry');
 var $editEntry = document.querySelector('.edit.hidden');
+var $deleteEntry = document.querySelector('.deleteEntry.hidden');
 var $new = document.querySelector('.new');
 
 $photoUrl.addEventListener('input', function (event) {
@@ -100,6 +101,7 @@ $ul.addEventListener('click', function (event) {
     $hiddenEntry.className = 'hidden';
     $new.className = 'new hidden';
     $editEntry.className = 'edit';
+    $deleteEntry.className = 'deleteEntry';
 
     for (var i = 0; i < data.entries.length; i++) {
       if (event.target.getAttribute('data-entry-id') === data.entries[i].entryId.toString()) {
@@ -129,6 +131,7 @@ $newEntry.addEventListener('click', function (event) {
   $hiddenEntry.className = 'hidden';
   $new.className = 'new';
   $editEntry.className = 'edit hidden';
+  $deleteEntry.className = 'deleteEntry hidden';
   $form.reset();
   $img.setAttribute('src', 'images/placeholder-image-square.jpg');
   $img.setAttribute('alt', 'image placeholder');

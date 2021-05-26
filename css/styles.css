@@ -71,18 +71,13 @@ img {
   flex-direction: column;
 }
 
-.button-container {
-  display: flex;
-  justify-content: flex-end;
-  margin: 1.2rem 0;
-}
-
-.button-container > button {
+.saveButton {
   color: white;
   background-color: #562b81;
   border-style: none;
   border-radius: 5px;
   padding: 0.5rem 1rem;
+  margin-top: 0.8rem;
   cursor: pointer;
 }
 
@@ -143,6 +138,7 @@ textarea:focus {
   text-decoration: underline;
   cursor: pointer;
   font-size: 18px;
+  display: inline-block;
 }
 
 @media screen and (min-width: 768px) {
