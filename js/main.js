@@ -1,15 +1,23 @@
 /* global data */
 /* exported data */
 
-var $title = document.querySelector('#title');
-var $photoUrl = document.querySelector('#photoUrl');
-var $notes = document.querySelector('#notes');
-var $img = document.querySelector('.imgPreview');
-var $noEntry = document.querySelector('.noEntry');
-var $editEntry = document.querySelector('.edit.hidden');
-var $deleteEntry = document.querySelector('.deleteEntry.hidden');
-var $new = document.querySelector('.new');
+var $title = document.querySelector('#title'); // title input
+var $photoUrl = document.querySelector('#photoUrl'); // photo url input
+var $notes = document.querySelector('#notes'); // description input
+var $img = document.querySelector('.imgPreview'); // img placeholder
+var $hiddenEntry = document.querySelector('.entry.hidden'); // entry hidden
+var $noEntry = document.querySelector('.noEntry.hidden'); // no entry notification hidden
+var $editEntry = document.querySelector('.edit.hidden'); // edit entry header hidden
+var $deleteEntry = document.querySelector('.deleteEntry.hidden'); // delete entry hidden
+var $new = document.querySelector('.new'); // new entry header
 
+// Keeps track of EntryId to use it to delete/splice the data where we want to
+// that is [data.entries.length - Number(currentEntryId)] since we go in reverse chrono order
+// Needs to reset to undefined after confirming delete, clicking navEntries, submitting form.
+var currentEntryId;
+
+// set img preview to desired picture
+// if no input, placeholder is shown on img preview
 $photoUrl.addEventListener('input', function (event) {
   $img.setAttribute('src', event.target.value);
   if (event.target.value === '') {
@@ -17,6 +25,10 @@ $photoUrl.addEventListener('input', function (event) {
   }
 });
 
+// on submit, check to see if we are editing or adding new entries
+// if edit, replace data.entries appropriately, remove all child of ul, renderAppend updated data.entries
+// if new, renderPrepend one data entry to existing entries
+// reset appropriately
 var $form = document.forms[0];
 $form.addEventListener('submit', function (event) {
   event.preventDefault();
@@ -46,11 +58,13 @@ $form.addEventListener('submit', function (event) {
   currentEntryId = undefined;
 });
 
+// beforeunload, store existing data.entries to local storage
 window.addEventListener('beforeunload', function (event) {
   var dataJSON = JSON.stringify(data);
   localStorage.setItem('data', dataJSON);
 });
 
+// on refresh, get previous data.entries and update current data.entries with it
 var dataItems = localStorage.getItem('data');
 var dataObj = JSON.parse(dataItems);
 
@@ -85,6 +99,8 @@ data.editing = null;
   </div>
 </div> */
 
+// on refresh, show noEntry if there are no data.entries
+// on refresh, renderAppend data.entries
 window.addEventListener('DOMContentLoaded', loadDom);
 
 function loadDom(event) {
@@ -95,10 +111,9 @@ function loadDom(event) {
   renderAppend(data.entries);
 }
 
-var currentEntryId;
-// Keeps track of EntryId to use it to delete/splice the data where we want to
-// that is [data.entries.length - Number(currentEntryId)] since we go in reverse chrono order
-// Needs to reset to undefined after confirming delete, clicking navEntries, submitting form.
+// when edit button is clicked, update currentEntryId, show and hide content appropriately
+// use for loop to find out which edit button was clicked and update data.editing to our current entry obj
+// prefill title, photo url, description, img preview
 var $ul = document.querySelector('ul');
 $ul.addEventListener('click', function (event) {
   if (event.target.getAttribute('data-entry-id') !== null) {
@@ -123,7 +138,8 @@ $ul.addEventListener('click', function (event) {
   }
 });
 
-var $hiddenEntry = document.querySelector('.entry.hidden');
+// when clicked, hide form, show entries
+// set data.editing to null and currentEntryId to undefined (their initial state)
 var $navEntries = document.querySelector('.entries');
 $navEntries.addEventListener('click', function (event) {
   $form.className = 'hidden';
@@ -132,6 +148,7 @@ $navEntries.addEventListener('click', function (event) {
   currentEntryId = undefined;
 });
 
+// when new entry is clicked, show form and hide the rest of the content
 var $newEntry = document.querySelector('.newEntry');
 $newEntry.addEventListener('click', function (event) {
   $form.removeAttribute('class');
@@ -145,16 +162,21 @@ $newEntry.addEventListener('click', function (event) {
   data.editing = null;
 });
 
+// when delete button is clicked, show background (confirmation modal)
 var $background = document.querySelector('.background.hidden');
 $deleteEntry.addEventListener('click', function (event) {
   $background.className = 'background';
 });
 
+// when cancel button is clicked on modal, hide background (confirmation modal)
 var $cancelButton = document.querySelector('.cancelButton');
 $cancelButton.addEventListener('click', function (evnet) {
   $background.className = 'background hidden';
 });
 
+// when confirm button is clicked on modal, hide background (confirmation modal)
+// remove all child of ul, delete desired data entry and update data.entries, renderAppend
+// hide and show appropriate content and check if there are any entries
 var $confirmButton = document.querySelector('.confirmButton');
 $confirmButton.addEventListener('click', function (event) {
   $background.className = 'background hidden';
@@ -176,6 +198,7 @@ $confirmButton.addEventListener('click', function (event) {
   }
 });
 
+// Dom tree creation for all data.entries and append
 function renderPrepend() {
   var newObj = {};
 
@@ -257,6 +280,7 @@ function renderPrepend() {
   $ul.prepend($row);
 }
 
+// Dom tree creation for new entry and prepend to existing data.entries
 function renderAppend(entry) {
   for (var elem of entry) {
     var $row = document.createElement('div');
