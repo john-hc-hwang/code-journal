@@ -21,7 +21,7 @@
     </div>
   </header>
   <main>
-    <div class="hidden" data-view="entries">
+    <div class="entry hidden" data-view="entries">
       <div class="container">
         <div class="column-full flex">
           <div class="column-half">
@@ -67,8 +67,15 @@
               <label for="notes">Notes</label>
               <textarea required name="notes" id="notes" cols="30" rows="10"></textarea>
             </div>
-            <div class="button-container">
-              <button type="submit">SAVE</button>
+            <div class="mediaview">
+              <div class="column-half">
+                <p class="deleteEntry">Delete Entry</p>
+              </div>
+              <div class="column-half no-padding">
+                <div class="button-container">
+                  <button type="submit">SAVE</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

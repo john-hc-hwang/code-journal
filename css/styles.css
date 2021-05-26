@@ -134,6 +134,17 @@ textarea:focus {
   cursor: pointer;
 }
 
+.no-padding {
+  padding: 0;
+}
+
+.deleteEntry {
+  color: red;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 18px;
+}
+
 @media screen and (min-width: 768px) {
   .mediaview {
     display: flex;

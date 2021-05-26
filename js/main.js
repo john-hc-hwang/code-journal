@@ -115,7 +115,7 @@ $ul.addEventListener('click', function (event) {
   }
 });
 
-var $hiddenEntry = document.querySelector('.hidden');
+var $hiddenEntry = document.querySelector('.entry.hidden');
 var $navEntries = document.querySelector('.entries');
 $navEntries.addEventListener('click', function (event) {
   $form.className = 'hidden';
