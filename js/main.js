@@ -43,6 +43,7 @@ $form.addEventListener('submit', function (event) {
 
   $form.className = 'hidden';
   $hiddenEntry.removeAttribute('class');
+  currentEntryId = undefined;
 });
 
 window.addEventListener('beforeunload', function (event) {
@@ -94,9 +95,11 @@ function loadDom(event) {
   renderAppend(data.entries);
 }
 
+var currentEntryId;
 var $ul = document.querySelector('ul');
 $ul.addEventListener('click', function (event) {
   if (event.target.getAttribute('data-entry-id') !== null) {
+    currentEntryId = event.target.getAttribute('data-entry-id');
     $form.removeAttribute('class');
     $hiddenEntry.className = 'hidden';
     $new.className = 'new hidden';
@@ -123,6 +126,7 @@ $navEntries.addEventListener('click', function (event) {
   $form.className = 'hidden';
   $hiddenEntry.removeAttribute('class');
   data.editing = null;
+  currentEntryId = undefined;
 });
 
 var $newEntry = document.querySelector('.newEntry');
@@ -136,6 +140,37 @@ $newEntry.addEventListener('click', function (event) {
   $img.setAttribute('src', 'images/placeholder-image-square.jpg');
   $img.setAttribute('alt', 'image placeholder');
   data.editing = null;
+});
+
+var $background = document.querySelector('.background.hidden');
+$deleteEntry.addEventListener('click', function (event) {
+  $background.className = 'background';
+});
+
+var $cancelButton = document.querySelector('.cancelButton');
+$cancelButton.addEventListener('click', function (evnet) {
+  $background.className = 'background hidden';
+});
+
+var $confirmButton = document.querySelector('.confirmButton');
+$confirmButton.addEventListener('click', function (event) {
+  $background.className = 'background hidden';
+  for (var i = 0; i < data.entries.length; i++) {
+    var firstChild = $ul.firstElementChild;
+    $ul.removeChild(firstChild);
+  }
+
+  data.entries.splice(data.entries.length - Number(currentEntryId), 1);
+  data.nextEntryId--;
+  renderAppend(data.entries);
+
+  $form.className = 'hidden';
+  $hiddenEntry.removeAttribute('class');
+  currentEntryId = undefined;
+
+  if (data.entries.length === 0) {
+    $noEntry.className = 'noEntry';
+  }
 });
 
 function renderPrepend() {
