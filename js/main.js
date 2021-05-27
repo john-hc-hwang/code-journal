@@ -26,8 +26,8 @@ $photoUrl.addEventListener('input', function (event) {
 });
 
 // on submit, check to see if we are editing or adding new entries
-// if edit, replace data.entries appropriately, remove all child of ul, renderAppend updated data.entries
-// if new, renderPrepend one data entry to existing entries
+// if edit, replace data.entries appropriately, remove all child of ul, render all updated data.entries
+// if new, prepend one data entry to existing entries
 // reset appropriately
 var $form = document.forms[0];
 $form.addEventListener('submit', function (event) {
@@ -44,9 +44,22 @@ $form.addEventListener('submit', function (event) {
       var firstChild = $ul.firstElementChild;
       $ul.removeChild(firstChild);
     }
-    renderAppend(data.entries);
+
+    for (var j = 0; j < data.entries.length; j++) {
+      $ul.appendChild(render(data.entries[j]));
+    }
   } else {
-    renderPrepend();
+    var newObj = {};
+
+    newObj.title = $title.value;
+    newObj.photoUrl = $photoUrl.value;
+    newObj.notes = $notes.value;
+    newObj.entryId = data.nextEntryId;
+    data.nextEntryId++;
+
+    data.entries.unshift(newObj);
+
+    $ul.prepend(render(newObj));
   }
   data.editing = null;
   $form.reset();
@@ -100,7 +113,7 @@ data.editing = null;
 </div> */
 
 // on refresh, show noEntry if there are no data.entries
-// on refresh, renderAppend data.entries
+// on refresh, render all data.entries
 window.addEventListener('DOMContentLoaded', loadDom);
 
 function loadDom(event) {
@@ -108,7 +121,9 @@ function loadDom(event) {
     $noEntry.className = 'noEntry';
     return;
   }
-  renderAppend(data.entries);
+  for (var i = 0; i < data.entries.length; i++) {
+    $ul.appendChild(render(data.entries[i]));
+  }
 }
 
 // when edit button is clicked, update currentEntryId, show and hide content appropriately
@@ -175,7 +190,7 @@ $cancelButton.addEventListener('click', function (evnet) {
 });
 
 // when confirm button is clicked on modal, hide background (confirmation modal)
-// remove all child of ul, delete desired data entry and update data.entries, renderAppend
+// remove all child of ul, delete desired data entry and update data.entries, render all
 // hide and show appropriate content and check if there are any entries
 var $confirmButton = document.querySelector('.confirmButton');
 $confirmButton.addEventListener('click', function (event) {
@@ -187,7 +202,9 @@ $confirmButton.addEventListener('click', function (event) {
 
   data.entries.splice(data.entries.length - Number(currentEntryId), 1);
   data.nextEntryId--;
-  renderAppend(data.entries);
+  for (var j = 0; j < data.entries.length; j++) {
+    $ul.appendChild(render(data.entries[j]));
+  }
 
   $form.className = 'hidden';
   $hiddenEntry.removeAttribute('class');
@@ -198,18 +215,8 @@ $confirmButton.addEventListener('click', function (event) {
   }
 });
 
-// Dom tree creation for all data.entries and append
-function renderPrepend() {
-  var newObj = {};
-
-  newObj.title = $title.value;
-  newObj.photoUrl = $photoUrl.value;
-  newObj.notes = $notes.value;
-  newObj.entryId = data.nextEntryId;
-  data.nextEntryId++;
-
-  data.entries.unshift(newObj);
-
+// Dom tree creation for new entry and return DOM Tree
+function render(entry) {
   var $row = document.createElement('div');
   $row.className = 'row';
 
@@ -234,8 +241,8 @@ function renderPrepend() {
   $colhalf.appendChild($imgContainer);
 
   var $image = document.createElement('img');
-  $image.setAttribute('src', newObj.photoUrl);
-  $image.setAttribute('alt', newObj.title);
+  $image.setAttribute('src', entry.photoUrl);
+  $image.setAttribute('alt', entry.title);
 
   $imgContainer.appendChild($image);
 
@@ -251,7 +258,7 @@ function renderPrepend() {
 
   var $entryTitle = document.createElement('p');
   $entryTitle.className = 'entryTitle';
-  $entryTitle.textContent = newObj.title;
+  $entryTitle.textContent = entry.title;
 
   $divflex.appendChild($entryTitle);
 
@@ -266,89 +273,16 @@ function renderPrepend() {
   var $edit = document.createElement('img');
   $edit.setAttribute('src', 'images/edit.PNG');
   $edit.setAttribute('alt', 'edit icon');
-  $edit.setAttribute('data-entry-id', newObj.entryId);
+  $edit.setAttribute('data-entry-id', entry.entryId);
   $edit.className = 'editButton';
 
   $div.appendChild($edit);
 
   var $entryNotes = document.createElement('p');
   $entryNotes.className = 'entryNotes';
-  $entryNotes.textContent = newObj.notes;
+  $entryNotes.textContent = entry.notes;
 
   $colhalf2.appendChild($entryNotes);
 
-  $ul.prepend($row);
-}
-
-// Dom tree creation for new entry and prepend to existing data.entries
-function renderAppend(entry) {
-  for (var elem of entry) {
-    var $row = document.createElement('div');
-    $row.className = 'row';
-
-    var $container = document.createElement('div');
-    $container.className = 'container';
-
-    $row.appendChild($container);
-
-    var $mediaview = document.createElement('div');
-    $mediaview.className = 'mediaview';
-
-    $container.appendChild($mediaview);
-
-    var $colhalf = document.createElement('div');
-    $colhalf.className = 'column-half';
-
-    $mediaview.appendChild($colhalf);
-
-    var $imgContainer = document.createElement('div');
-    $imgContainer.className = 'img-container';
-
-    $colhalf.appendChild($imgContainer);
-
-    var $image = document.createElement('img');
-    $image.setAttribute('src', elem.photoUrl);
-    $image.setAttribute('alt', elem.title);
-
-    $imgContainer.appendChild($image);
-
-    var $colhalf2 = document.createElement('div');
-    $colhalf2.className = 'column-half';
-
-    $mediaview.appendChild($colhalf2);
-
-    var $divflex = document.createElement('div');
-    $divflex.className = 'flex';
-
-    $colhalf2.appendChild($divflex);
-
-    var $entryTitle = document.createElement('p');
-    $entryTitle.className = 'entryTitle';
-    $entryTitle.textContent = elem.title;
-
-    $divflex.appendChild($entryTitle);
-
-    var $editContainer = document.createElement('div');
-    $editContainer.className = 'column-full flex end edit-container';
-    $divflex.appendChild($editContainer);
-
-    var $div = document.createElement('div');
-    $div.className = 'fixedWidth';
-    $editContainer.appendChild($div);
-
-    var $edit = document.createElement('img');
-    $edit.setAttribute('src', 'images/edit.PNG');
-    $edit.setAttribute('alt', 'edit icon');
-    $edit.setAttribute('data-entry-id', elem.entryId);
-    $edit.className = 'editButton';
-
-    $div.appendChild($edit);
-
-    var $entryNotes = document.createElement('p');
-    $entryNotes.className = 'entryNotes';
-    $entryNotes.textContent = elem.notes;
-
-    $colhalf2.appendChild($entryNotes);
-    $ul.append($row);
-  }
+  return $row;
 }
