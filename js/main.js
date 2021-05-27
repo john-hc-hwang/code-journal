@@ -1,14 +1,23 @@
 /* global data */
 /* exported data */
 
-var $title = document.querySelector('#title');
-var $photoUrl = document.querySelector('#photoUrl');
-var $notes = document.querySelector('#notes');
-var $img = document.querySelector('.imgPreview');
-var $noEntry = document.querySelector('.noEntry');
-var $editEntry = document.querySelector('.edit.hidden');
-var $new = document.querySelector('.new');
+var $title = document.querySelector('#title'); // title input
+var $photoUrl = document.querySelector('#photoUrl'); // photo url input
+var $notes = document.querySelector('#notes'); // description input
+var $img = document.querySelector('.imgPreview'); // img placeholder
+var $hiddenEntry = document.querySelector('.entry.hidden'); // entry hidden
+var $noEntry = document.querySelector('.noEntry.hidden'); // no entry notification hidden
+var $editEntry = document.querySelector('.edit.hidden'); // edit entry header hidden
+var $deleteEntry = document.querySelector('.deleteEntry.hidden'); // delete entry hidden
+var $new = document.querySelector('.new'); // new entry header
 
+// Keeps track of EntryId to use it to delete/splice the data where we want to
+// that is [data.entries.length - Number(currentEntryId)] since we go in reverse chrono order
+// Needs to reset to undefined after confirming delete, clicking navEntries, submitting form.
+var currentEntryId;
+
+// set img preview to desired picture
+// if no input, placeholder is shown on img preview
 $photoUrl.addEventListener('input', function (event) {
   $img.setAttribute('src', event.target.value);
   if (event.target.value === '') {
@@ -16,6 +25,10 @@ $photoUrl.addEventListener('input', function (event) {
   }
 });
 
+// on submit, check to see if we are editing or adding new entries
+// if edit, replace data.entries appropriately, remove all child of ul, render all updated data.entries
+// if new, prepend one data entry to existing entries
+// reset appropriately
 var $form = document.forms[0];
 $form.addEventListener('submit', function (event) {
   event.preventDefault();
@@ -31,9 +44,22 @@ $form.addEventListener('submit', function (event) {
       var firstChild = $ul.firstElementChild;
       $ul.removeChild(firstChild);
     }
-    renderAppend(data.entries);
+
+    for (var j = 0; j < data.entries.length; j++) {
+      $ul.appendChild(render(data.entries[j]));
+    }
   } else {
-    renderPrepend();
+    var newObj = {};
+
+    newObj.title = $title.value;
+    newObj.photoUrl = $photoUrl.value;
+    newObj.notes = $notes.value;
+    newObj.entryId = data.nextEntryId;
+    data.nextEntryId++;
+
+    data.entries.unshift(newObj);
+
+    $ul.prepend(render(newObj));
   }
   data.editing = null;
   $form.reset();
@@ -42,13 +68,16 @@ $form.addEventListener('submit', function (event) {
 
   $form.className = 'hidden';
   $hiddenEntry.removeAttribute('class');
+  currentEntryId = undefined;
 });
 
+// beforeunload, store existing data.entries to local storage
 window.addEventListener('beforeunload', function (event) {
   var dataJSON = JSON.stringify(data);
   localStorage.setItem('data', dataJSON);
 });
 
+// on refresh, get previous data.entries and update current data.entries with it
 var dataItems = localStorage.getItem('data');
 var dataObj = JSON.parse(dataItems);
 
@@ -83,6 +112,8 @@ data.editing = null;
   </div>
 </div> */
 
+// on refresh, show noEntry if there are no data.entries
+// on refresh, render all data.entries
 window.addEventListener('DOMContentLoaded', loadDom);
 
 function loadDom(event) {
@@ -90,16 +121,23 @@ function loadDom(event) {
     $noEntry.className = 'noEntry';
     return;
   }
-  renderAppend(data.entries);
+  for (var i = 0; i < data.entries.length; i++) {
+    $ul.appendChild(render(data.entries[i]));
+  }
 }
 
+// when edit button is clicked, update currentEntryId, show and hide content appropriately
+// use for loop to find out which edit button was clicked and update data.editing to our current entry obj
+// prefill title, photo url, description, img preview
 var $ul = document.querySelector('ul');
 $ul.addEventListener('click', function (event) {
   if (event.target.getAttribute('data-entry-id') !== null) {
+    currentEntryId = event.target.getAttribute('data-entry-id');
     $form.removeAttribute('class');
     $hiddenEntry.className = 'hidden';
     $new.className = 'new hidden';
     $editEntry.className = 'edit';
+    $deleteEntry.className = 'deleteEntry';
 
     for (var i = 0; i < data.entries.length; i++) {
       if (event.target.getAttribute('data-entry-id') === data.entries[i].entryId.toString()) {
@@ -115,37 +153,70 @@ $ul.addEventListener('click', function (event) {
   }
 });
 
-var $hiddenEntry = document.querySelector('.hidden');
+// when clicked, hide form, show entries
+// set data.editing to null and currentEntryId to undefined (their initial state)
 var $navEntries = document.querySelector('.entries');
 $navEntries.addEventListener('click', function (event) {
   $form.className = 'hidden';
   $hiddenEntry.removeAttribute('class');
   data.editing = null;
+  currentEntryId = undefined;
 });
 
+// when new entry is clicked, show form and hide the rest of the content
 var $newEntry = document.querySelector('.newEntry');
 $newEntry.addEventListener('click', function (event) {
   $form.removeAttribute('class');
   $hiddenEntry.className = 'hidden';
   $new.className = 'new';
   $editEntry.className = 'edit hidden';
+  $deleteEntry.className = 'deleteEntry hidden';
   $form.reset();
   $img.setAttribute('src', 'images/placeholder-image-square.jpg');
   $img.setAttribute('alt', 'image placeholder');
   data.editing = null;
 });
 
-function renderPrepend() {
-  var newObj = {};
+// when delete button is clicked, show background (confirmation modal)
+var $background = document.querySelector('.background.hidden');
+$deleteEntry.addEventListener('click', function (event) {
+  $background.className = 'background';
+});
 
-  newObj.title = $title.value;
-  newObj.photoUrl = $photoUrl.value;
-  newObj.notes = $notes.value;
-  newObj.entryId = data.nextEntryId;
-  data.nextEntryId++;
+// when cancel button is clicked on modal, hide background (confirmation modal)
+var $cancelButton = document.querySelector('.cancelButton');
+$cancelButton.addEventListener('click', function (evnet) {
+  $background.className = 'background hidden';
+});
 
-  data.entries.unshift(newObj);
+// when confirm button is clicked on modal, hide background (confirmation modal)
+// remove all child of ul, delete desired data entry and update data.entries, render all
+// hide and show appropriate content and check if there are any entries
+var $confirmButton = document.querySelector('.confirmButton');
+$confirmButton.addEventListener('click', function (event) {
+  $background.className = 'background hidden';
+  for (var i = 0; i < data.entries.length; i++) {
+    var firstChild = $ul.firstElementChild;
+    $ul.removeChild(firstChild);
+  }
 
+  data.entries.splice(data.entries.length - Number(currentEntryId), 1);
+  data.nextEntryId--;
+  for (var j = 0; j < data.entries.length; j++) {
+    $ul.appendChild(render(data.entries[j]));
+  }
+
+  $form.className = 'hidden';
+  $hiddenEntry.removeAttribute('class');
+  currentEntryId = undefined;
+
+  if (data.entries.length === 0) {
+    $noEntry.className = 'noEntry';
+  }
+});
+
+// Dom tree creation for new entry and return DOM Tree
+function render(entry) {
   var $row = document.createElement('div');
   $row.className = 'row';
 
@@ -170,8 +241,8 @@ function renderPrepend() {
   $colhalf.appendChild($imgContainer);
 
   var $image = document.createElement('img');
-  $image.setAttribute('src', newObj.photoUrl);
-  $image.setAttribute('alt', newObj.title);
+  $image.setAttribute('src', entry.photoUrl);
+  $image.setAttribute('alt', entry.title);
 
   $imgContainer.appendChild($image);
 
@@ -187,7 +258,7 @@ function renderPrepend() {
 
   var $entryTitle = document.createElement('p');
   $entryTitle.className = 'entryTitle';
-  $entryTitle.textContent = newObj.title;
+  $entryTitle.textContent = entry.title;
 
   $divflex.appendChild($entryTitle);
 
@@ -202,88 +273,16 @@ function renderPrepend() {
   var $edit = document.createElement('img');
   $edit.setAttribute('src', 'images/edit.PNG');
   $edit.setAttribute('alt', 'edit icon');
-  $edit.setAttribute('data-entry-id', newObj.entryId);
+  $edit.setAttribute('data-entry-id', entry.entryId);
   $edit.className = 'editButton';
 
   $div.appendChild($edit);
 
   var $entryNotes = document.createElement('p');
   $entryNotes.className = 'entryNotes';
-  $entryNotes.textContent = newObj.notes;
+  $entryNotes.textContent = entry.notes;
 
   $colhalf2.appendChild($entryNotes);
 
-  $ul.prepend($row);
-}
-
-function renderAppend(entry) {
-  for (var elem of entry) {
-    var $row = document.createElement('div');
-    $row.className = 'row';
-
-    var $container = document.createElement('div');
-    $container.className = 'container';
-
-    $row.appendChild($container);
-
-    var $mediaview = document.createElement('div');
-    $mediaview.className = 'mediaview';
-
-    $container.appendChild($mediaview);
-
-    var $colhalf = document.createElement('div');
-    $colhalf.className = 'column-half';
-
-    $mediaview.appendChild($colhalf);
-
-    var $imgContainer = document.createElement('div');
-    $imgContainer.className = 'img-container';
-
-    $colhalf.appendChild($imgContainer);
-
-    var $image = document.createElement('img');
-    $image.setAttribute('src', elem.photoUrl);
-    $image.setAttribute('alt', elem.title);
-
-    $imgContainer.appendChild($image);
-
-    var $colhalf2 = document.createElement('div');
-    $colhalf2.className = 'column-half';
-
-    $mediaview.appendChild($colhalf2);
-
-    var $divflex = document.createElement('div');
-    $divflex.className = 'flex';
-
-    $colhalf2.appendChild($divflex);
-
-    var $entryTitle = document.createElement('p');
-    $entryTitle.className = 'entryTitle';
-    $entryTitle.textContent = elem.title;
-
-    $divflex.appendChild($entryTitle);
-
-    var $editContainer = document.createElement('div');
-    $editContainer.className = 'column-full flex end edit-container';
-    $divflex.appendChild($editContainer);
-
-    var $div = document.createElement('div');
-    $div.className = 'fixedWidth';
-    $editContainer.appendChild($div);
-
-    var $edit = document.createElement('img');
-    $edit.setAttribute('src', 'images/edit.PNG');
-    $edit.setAttribute('alt', 'edit icon');
-    $edit.setAttribute('data-entry-id', elem.entryId);
-    $edit.className = 'editButton';
-
-    $div.appendChild($edit);
-
-    var $entryNotes = document.createElement('p');
-    $entryNotes.className = 'entryNotes';
-    $entryNotes.textContent = elem.notes;
-
-    $colhalf2.appendChild($entryNotes);
-    $ul.append($row);
-  }
+  return $row;
 }

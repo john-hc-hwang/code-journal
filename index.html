@@ -15,13 +15,26 @@
 </head>
 
 <body>
+  <div class="background hidden">
+    <div class="middle">
+      <div class="deleteContainer">
+        <div>
+          <p class="confirmText text-center">Are you sure you want to delete this entry?</p>
+        </div>
+        <div class="moveButtons">
+          <button class="cancelButton">CANCEL</button>
+          <button class="confirmButton">CONFIRM</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <header>
     <div class="container">
       <h2 class="column-full">Code Journal<span class="entries">Entries</span></h2>
     </div>
   </header>
   <main>
-    <div class="hidden" data-view="entries">
+    <div class="entry hidden" data-view="entries">
       <div class="container">
         <div class="column-full flex">
           <div class="column-half">
@@ -67,8 +80,15 @@
               <label for="notes">Notes</label>
               <textarea required name="notes" id="notes" cols="30" rows="10"></textarea>
             </div>
-            <div class="button-container">
-              <button type="submit">SAVE</button>
+            <div class="column-full flex no-padding">
+              <div class="column-half">
+                <p class="deleteEntry hidden">Delete Entry</p>
+              </div>
+              <div class="column-half flex end no-padding">
+                <div>
+                  <button class="saveButton" type="submit">SAVE</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
