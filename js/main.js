@@ -81,6 +81,7 @@ window.addEventListener('beforeunload', function (event) {
 var dataItems = localStorage.getItem('data');
 var dataObj = JSON.parse(dataItems);
 
+// set data objects properties to its previous values
 data.view = dataObj.view;
 data.entries = dataObj.entries;
 data.editing = dataObj.editing;
