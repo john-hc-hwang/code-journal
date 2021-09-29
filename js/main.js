@@ -1,6 +1,8 @@
 /* global data */
 /* exported data */
 
+// successfully deployed on github pages
+
 var $title = document.querySelector('#title'); // title input
 var $photoUrl = document.querySelector('#photoUrl'); // photo url input
 var $notes = document.querySelector('#notes'); // description input
